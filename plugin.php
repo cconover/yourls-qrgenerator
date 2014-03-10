@@ -12,15 +12,15 @@ Author URI: https://christiaanconover.com/?ref=yourls-qrplugin-author
 class cconover_qrcode {
 	function __construct() {
 		// Trigger the QR code generator if YOURLS doesn't recognize the URL pattern
-		yourls_add_action( 'loader_failed', array( $this, 'generateQR' ) );
+		yourls_add_action( 'loader_failed', array( $this, 'generateqr' ) );
 		
 		// Do not allow a direct call to the plugin file
-		if ( !defined( 'YOURLS_ABSPATH' ) ) {
+		if ( ! defined( 'YOURLS_ABSPATH' ) ) {
 			die();
 		}
 	} // End __construct()
 	
-	public function generateQR ( $request ) {
+	public function generateqr ( $request ) {
 		// Check for cURL and GD on the server
 		if ( function_exists( 'curl_version' ) && function_exists ( 'imagecreatefromstring' ) ) {
 			// Make Regex pattern for keyword
@@ -72,11 +72,11 @@ class cconover_qrcode {
 			}
 		}
 		// If cURL is installed, but not GD
-		elseif ( function_exists( 'curl_version' ) && !function_exists( 'imagecreatefromstring' ) ) {
+		elseif ( function_exists( 'curl_version' ) && ! function_exists( 'imagecreatefromstring' ) ) {
 			$result = 'Your server does not have GD installed, which is required to use this plugin.';
 		}
 		// If GD is installed, but not cURL
-		elseif ( function_exists( 'imagecreatefromstring' ) && function_exists( 'curl_version' ) ) {
+		elseif ( function_exists( 'imagecreatefromstring' ) && ! function_exists( 'curl_version' ) ) {
 			$result = 'Your server does not have cURL installed, which is required to use this plugin.';
 		}
 		else {
@@ -85,7 +85,7 @@ class cconover_qrcode {
 		
 		// Display the result
 		echo $result;
-	} // End generateQR()
+	} // End generateqr()
 } // End cconover_qrcode
 
 // Create new QR code object
