@@ -19,29 +19,13 @@ class cconover_qrcode {
 			die();
 		}
 		
-		// Require PHP QR Code Class
+		// Require PHP QR Code library
 		require_once( 'phpqrcode.php' );
 	} // End __construct()
 	
 	public function generateqr ( $request ) {
 		// Make Regex pattern for keyword
 		$pattern = yourls_make_regexp_pattern( yourls_get_shorturl_charset() );
-
-		// If valid QR code size is provided, use it.  If not, default to 200px square
-		if ( isset( $_GET['s'] ) && is_numeric( $_GET['s'] ) && ( $_GET['s'] > 0 && $_GET['s'] <= 540 ) ) {
-			$size = $_GET['s'];
-		}
-		else {
-			$size = 200;
-		}
-
-		// Set Error Correction Level
-		if ( isset($_GET['ecl'] ) && ( strtoupper( $_GET['ecl'] ) == 'L' || strtoupper( $_GET['ecl'] ) == 'M' || strtoupper( $_GET['ecl'] ) == 'Q' || strtoupper( $_GET['ecl'] ) == 'H' ) ) {
-			$ecl = strtoupper( $_GET['ecl'] );
-		}
-		else {
-			$ecl = 'M';
-		}
 
 		// Identify short URL using keyword pattern
 		if( preg_match( "@^([$pattern]+)\.qr?/?$@", $request[0], $matches ) ) {
