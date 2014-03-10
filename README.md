@@ -9,4 +9,4 @@ FEATURES
 
 For full details about the plugin, including using the URL query features, visit the main [plugin page](http://cnvr.cc/qrplugin-readme).
 
-This plugin borrows code from Ozh' [QR Code plugin](https://github.com/YOURLS/YOURLS/wiki/Plugin-%3D-QRCode-ShortURL)
+This plugin borrows code from Ozh' [QR Code plugin](https://github.com/YOURLS/YOURLS/wiki/Plugin-%3D-QRCode-ShortURL) and [PHP QR Code Class](http://phpqrclass.sourceforge.net/).
