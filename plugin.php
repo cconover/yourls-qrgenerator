@@ -11,13 +11,18 @@ Author URI: https://christiaanconover.com/?ref=yourls-qrplugin-author
 // Plugin class
 class cconover_qrcode {
 	function __construct() {
-		// Trigger if the loader doesn't recognize the pattern
+		// Trigger the QR code generator if YOURLS doesn't recognize the URL pattern
 		yourls_add_action( 'loader_failed', array( $this, 'generateQR' ) );
+		
+		// Do not allow a direct call to the plugin file
+		if ( !defined( 'YOURLS_ABSPATH' ) ) {
+			die();
+		}
 	} // End __construct()
 	
 	public function generateQR ( $request ) {
-		// Check for cURL on the server
-		if ( function_exists( 'curl_version' ) ) {
+		// Check for cURL and GD on the server
+		if ( function_exists( 'curl_version' ) && function_exists ( 'imagecreatefromstring' ) ) {
 			// Make Regex pattern for keyword
 			$pattern = yourls_make_regexp_pattern( yourls_get_shorturl_charset() );
 	
@@ -50,20 +55,34 @@ class cconover_qrcode {
 				
 					// Initialize cURL
 					$ch = curl_init( $generateurl );
-					curl_setopt($ch, CURLOPT_HEADER, 0);
-					curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-					curl_setopt($ch, CURLOPT_BINARYTRANSFER,1);
-					curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+					curl_setopt( $ch, CURLOPT_HEADER, 0 );
+					curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 );
+					curl_setopt( $ch, CURLOPT_BINARYTRANSFER,1 );
+					curl_setopt( $ch, CURLOPT_FOLLOWLOCATION, true );
 				
 					// Fetch QR code and close cURL session
-					$result = curl_exec( $ch );
+					$qrdata = curl_exec( $ch );
 					curl_close( $ch );
+					
+					// Generate image from data retrived from Google API
+					$qrimg = imagecreatefromstring( $qrdata );
+					$result = $qrimg;
+					imagedestroy( $qrimg );
 				}
 			}
 		}
-		else {
-			$result = 'Your server does not have cURL installed, which is required to use this plugin.'
+		// If cURL is installed, but not GD
+		elseif ( function_exists( 'curl_version' ) && !function_exists( 'imagecreatefromstring' ) ) {
+			$result = 'Your server does not have GD installed, which is required to use this plugin.';
 		}
+		// If GD is installed, but not cURL
+		elseif ( function_exists( 'imagecreatefromstring' ) && function_exists( 'curl_version' ) ) {
+			$result = 'Your server does not have cURL installed, which is required to use this plugin.';
+		}
+		else {
+			$result = 'Your server does not have cURL or GD installed, both of which are required to use this plugin.';
+		}
+		
 		// Display the result
 		echo $result;
 	} // End generateQR()
