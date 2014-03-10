@@ -8,6 +8,3 @@ FEATURES
 - Specify the QR error correction level (ECL) via URL query
 
 For full details about the plugin, including using the URL query features, visit http://cnvr.cc/qrplugin-readme
-
-WARRANTY
-This software is provided as-is, without warranty of any kind.  The software creator is not responsible for anything this software does or causes.
